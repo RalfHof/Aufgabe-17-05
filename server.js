@@ -1,28 +1,36 @@
-const express = require("express");
-const fs = require("fs"); 
+const express = require('express');
+const path = require('path');
 const app = express();
-const PORT = 3000;
+
+app.use(express.static(path.join(__dirname)));
 
 
-app.use(express.urlencoded({ extended: true }));
-
-
-
-app.get("/", (req, res) => {
-    console.log("hallo aus der GET-Funktion");
-    res.sendFile(__dirname + "/index.html");
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'home.html'));
 });
 
 
-app.post("/submit", (req, res) => {
-    console.log(req.body);
-    const { name, email, password } = req.body;
-
-    fs.appendFile('users.txt', `Name: ${name}, E-Mail: ${email}, Passwort: ${password}\n`, (err) => {
-        if (err) {
-            console.error('Fehler beim Schreiben der Datei', err);
-            return res.status(500).send('Fehler beim Schreiben der Datei');
-        }
-        res.send('Registrierung erfolgreich!');
-    });
+app.get('/kontakt', (req, res) => {
+    res.sendFile(path.join(__dirname, 'kontakt.html'));
 });
+
+
+app.get('/ueber-uns', (req, res) => {
+    res.sendFile(path.join(__dirname, 'ueber-uns.html'));
+});
+
+
+app.get('/impressum', (req, res) => {
+    res.sendFile(path.join(__dirname, 'impressum.html'));
+});
+
+
+app.get('/datenschutz', (req, res) => {
+    res.sendFile(path.join(__dirname, 'datenschutz.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server läuft auf Port ${PORT}`);
+});
+
